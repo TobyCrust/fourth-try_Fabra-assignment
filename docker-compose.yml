@@ -1,0 +1,9 @@
+
+
+services:
+  front-end:
+    build: ./sauce/front-end/
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./sauce/front-end/:/app/
