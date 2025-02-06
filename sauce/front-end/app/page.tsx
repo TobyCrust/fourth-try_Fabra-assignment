@@ -10,6 +10,22 @@ import { Shirt } from '../public/threedobject/shirtcode';
 
 
 
+import { Button } from "@chakra-ui/react"
+import {
+  DrawerActionTrigger,
+  DrawerBackdrop,
+  DrawerBody,
+  DrawerCloseTrigger,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerRoot,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+
+
+
 
 
 // const Model = () => {
@@ -25,6 +41,11 @@ import { Shirt } from '../public/threedobject/shirtcode';
 //   );
 
 // }
+
+
+
+
+
 
 
 export default function Home() { // This is where I'm puttig the model and all the camera/environment settings ect
@@ -56,13 +77,16 @@ export default function Home() { // This is where I'm puttig the model and all t
         <button onClick={() => changeMaterial('front')}>Change Front</button>
         <button onClick={() => changeMaterial('neckline')}>Change Neckline</button>
         <button onClick={() => changeMaterial('leftSleeve')}>Change Left Sleeve</button>
-        <button onClick={() => changeMaterial('rightSleeve')}>Change Right Sleevessssssss</button> 
+        <button onClick={() => changeMaterial('rightSleeve')}>Change Right Sleeve</button> 
       </div>
 
       <ThreeDContainer>
         <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 10, 40], fov: 50 }}>
           <ambientLight intensity={0.2} />
           <spotLight intensity={600.6} angle={0.6} penumbra={2} position={[10, 15, 10]} castShadow />
+          <spotLight intensity={500000.6} angle={0.6} penumbra={2} position={[-220, -195, -150]} castShadow />
+          
+         
           {/* <spotLight intensity={600.6} angle={0.2} penumbra={2} position={[10, 15, 10]} castShadow /> */}
           <Suspense fallback={null}>
             <Shirt scale={22.6} position={[0, -2, 0]} materials={materials} />
