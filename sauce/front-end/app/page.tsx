@@ -63,7 +63,7 @@ export default function Home() { // This is where I'm puttig the model and all t
         <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 10, 40], fov: 50 }}>
           <ambientLight intensity={0.2} />
           <spotLight intensity={600.6} angle={0.6} penumbra={2} position={[10, 15, 10]} castShadow />
-          <spotLight intensity={600.6} angle={0.2} penumbra={2} position={[10, 15, 10]} castShadow />
+          {/* <spotLight intensity={600.6} angle={0.2} penumbra={2} position={[10, 15, 10]} castShadow /> */}
           <Suspense fallback={null}>
             <Shirt scale={22.6} position={[0, -2, 0]} materials={materials} />
             <Environment preset="studio" environmentIntensity={0.6} environmentRotation={[1000, 100, 0]}/>
