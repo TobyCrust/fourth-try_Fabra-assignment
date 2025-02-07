@@ -16,7 +16,7 @@ const CameraMovement: React.FC<CameraMovementProps> = ({ position }) => {
       cameraRef.current.position.lerp(new THREE.Vector3(...position), 0.05);
       cameraRef.current.lookAt(0, 0, 25);
       cameraRef.current.rotation.set(0, 0, 0);
-      console.log(cameraRef.current.position);
+      
     }
   });
 
