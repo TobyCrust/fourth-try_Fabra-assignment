@@ -1,3 +1,31 @@
+
+
+Need to change the orbit controls too rotate the object instead of the camera as I have camera smoothing that auto goes to the locations so this will take over that
+
+
+I have now added in functonality that allows you to smoothly transition to the selected area of the shirt when the button is clicked, and you are able to rotate the shirt around it's axis. This is different to how I've done it previously where I have multiple child objects that I would transition the camera to, each with their own location and rotation, that were parented to the central viewing object. This would mean that right rotation would be applied to the camera when coming up to that point. However I'm not sure it this is possible with three.js, and I have other things I need to build first. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//=======================defalut test====================================
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

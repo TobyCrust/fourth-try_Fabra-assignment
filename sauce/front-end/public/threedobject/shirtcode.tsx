@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, forwardRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
@@ -32,7 +32,7 @@ interface ShirtProps extends React.ComponentProps<'group'> {
   onPartHover?: (part: ShirtPart) => void;
 }
 
-export function Shirt({ materials: materialProps, onPartHover, ...props }: ShirtProps): JSX.Element {
+export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialProps, onPartHover, ...props }, ref): JSX.Element => {
   // Track which part is currently hovered.
   const [hoveredPart, setHoveredPart] = useState<ShirtPart | null>(null);
   
@@ -58,7 +58,7 @@ export function Shirt({ materials: materialProps, onPartHover, ...props }: Shirt
   );
 
   return (
-    <group {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <mesh
         castShadow
         receiveShadow
@@ -168,7 +168,7 @@ export function Shirt({ materials: materialProps, onPartHover, ...props }: Shirt
       />
     </group>
   )
-}
+});
 
 useGLTF.preload('/Shirt-textures2.glb')
 
