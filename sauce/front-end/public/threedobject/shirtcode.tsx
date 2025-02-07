@@ -37,7 +37,7 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
   // Track which part is currently hovered.
   const [hoveredPart, setHoveredPart] = useState<ShirtPart | null>(null);
   
-  const { nodes, materials } = useGLTF('/threedobject/Shirt-textures2.glb') as unknown as { nodes: Nodes; materials: any };
+  const { nodes, materials } = useGLTF('/threedobject/Shirt.glb') as unknown as { nodes: Nodes; materials: any };
   
   // Default patterns 
   const patterns: Patterns = {
@@ -191,7 +191,7 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
   )
 });
 
-useGLTF.preload('/Shirt-textures2.glb')
+useGLTF.preload('/Shirt.glb')
 
 
 
