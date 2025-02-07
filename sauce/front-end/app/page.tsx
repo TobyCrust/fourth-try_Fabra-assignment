@@ -59,6 +59,7 @@ export default function Home() {
               scale={22.6} 
               position={[0, -2, 0]} 
               materials={materials} 
+              setCameraPosition={setCameraPosition}
             />
             <Environment preset="studio" environmentIntensity={0.6} environmentRotation={[1000, 100, 0]}/>
             <ShirtRotationControls meshRef={shirtRef} />

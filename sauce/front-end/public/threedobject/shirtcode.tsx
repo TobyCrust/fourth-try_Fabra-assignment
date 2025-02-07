@@ -30,9 +30,10 @@ interface ShirtProps extends React.ComponentProps<'group'> {
     rightSleeve?: string;
   };
   onPartHover?: (part: ShirtPart) => void;
+  setCameraPosition?: (position: [number, number, number]) => void;
 }
 
-export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialProps, onPartHover, ...props }, ref): JSX.Element => {
+export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialProps, onPartHover, setCameraPosition, ...props }, ref): JSX.Element => {
   // Track which part is currently hovered.
   const [hoveredPart, setHoveredPart] = useState<ShirtPart | null>(null);
   
@@ -69,6 +70,10 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
             : materials[materialProps?.back || patterns.rp]
         }
         position={[0, -1.152, 0.065]}
+        onClick={(e) => {
+          e.stopPropagation();
+          setCameraPosition?.([0, 0, 25]);
+        }}
         onPointerOver={(e) => {
           e.stopPropagation();
           setHoveredPart('back');
@@ -89,6 +94,10 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
             : materials[materialProps?.front || patterns.rp]
         }
         position={[0, -1.152, 0.065]}
+        onClick={(e) => {
+          e.stopPropagation();
+          setCameraPosition?.([0, 0, 25]);
+        }}
         onPointerOver={(e) => {
           e.stopPropagation();
           setHoveredPart('front');
@@ -109,6 +118,10 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
             : materials[materialProps?.neckline || patterns.dn]
         }
         position={[0, -1.152, 0.065]}
+        onClick={(e) => {
+          e.stopPropagation();
+          setCameraPosition?.([0, 5, 10]);
+        }}
         onPointerOver={(e) => {
           e.stopPropagation();
           setHoveredPart('neckline');
@@ -136,6 +149,10 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
             : materials[materialProps?.leftSleeve || patterns.ht]
         }
         position={[0, -1.152, 0.065]}
+        onClick={(e) => {
+          e.stopPropagation();
+          setCameraPosition?.([5, 0, 15]);
+        }}
         onPointerOver={(e) => {
           e.stopPropagation();
           setHoveredPart('leftSleeve');
@@ -156,6 +173,10 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
             : materials[materialProps?.rightSleeve || patterns.ht]
         }
         position={[0, -1.152, 0.065]}
+        onClick={(e) => {
+          e.stopPropagation();
+          setCameraPosition?.([-5, 0, 15]);
+        }}
         onPointerOver={(e) => {
           e.stopPropagation();
           setHoveredPart('rightSleeve');
