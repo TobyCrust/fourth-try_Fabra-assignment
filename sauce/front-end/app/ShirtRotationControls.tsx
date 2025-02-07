@@ -11,6 +11,7 @@ const ShirtRotationControls = ({ meshRef }: ShirtRotationControlsProps) => {
   const isDragging = useRef(false);
   const previousMousePosition = useRef({ x: 0, y: 0 });
   const rotationSpeed = 0.006;
+  const scaleSpeed = 0.01;
 
   useEffect(() => {
     const onMouseDown = (event: MouseEvent) => {
@@ -42,14 +43,27 @@ const ShirtRotationControls = ({ meshRef }: ShirtRotationControlsProps) => {
       isDragging.current = false;
     };
 
+    const handleWheel = (event: WheelEvent) => {
+      if (!meshRef.current) return;
+      
+      const scaleDelta = -event.deltaY * scaleSpeed;
+      meshRef.current.scale.addScalar(scaleDelta);
+      
+      const minScale = 15;
+      const maxScale = 40;
+      meshRef.current.scale.clampScalar(minScale, maxScale);
+    };
+
     gl.domElement.addEventListener('mousedown', onMouseDown);
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+    gl.domElement.addEventListener('wheel', handleWheel);
 
     return () => {
       gl.domElement.removeEventListener('mousedown', onMouseDown);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
+      gl.domElement.removeEventListener('wheel', handleWheel);
     };
   }, [gl, meshRef]);
 

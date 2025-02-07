@@ -6,7 +6,7 @@ Need to change the orbit controls too rotate the object instead of the camera as
 I have now added in functonality that allows you to smoothly transition to the selected area of the shirt when the button is clicked, and you are able to rotate the shirt around it's axis. This is different to how I've done it previously where I have multiple child objects that I would transition the camera to, each with their own location and rotation, that were parented to the central viewing object. This would mean that right rotation would be applied to the camera when coming up to that point. However I'm not sure it this is possible with three.js, and I have other things I need to build first. 
 
 
-
+Added a variable that changes the shirt scale which replicates the camera zoom in. I set the min an max scales accordingly and the zoomin speed.
 
 
 
