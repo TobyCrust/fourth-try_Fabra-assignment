@@ -1,9 +1,24 @@
-
-
+version: '3.8'
 services:
-  front-end:
-    build: ./sauce/front-end/
+  db:
+    build: .
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: .
     ports:
       - "3000:3000"
-    volumes:
-      - ./sauce/front-end/:/app/
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=authuser
+      - DB_PASSWORD=authpassword
+      - DB_NAME=authdb
+      - JWT_SECRET=your_jwt_secret
+
+volumes:
+  postgres_data:

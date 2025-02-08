@@ -30,10 +30,11 @@ interface ShirtProps extends React.ComponentProps<'group'> {
     rightSleeve?: string;
   };
   onPartHover?: (part: ShirtPart) => void;
+  onPartClick?: (part: ShirtPart) => void;
   setCameraPosition?: (position: [number, number, number]) => void;
 }
 
-export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialProps, onPartHover, setCameraPosition, ...props }, ref): JSX.Element => {
+export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialProps, onPartHover, onPartClick, setCameraPosition, ...props }, ref): JSX.Element => {
   // Track which part is currently hovered.
   const [hoveredPart, setHoveredPart] = useState<ShirtPart | null>(null);
   
@@ -73,6 +74,7 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
         onClick={(e) => {
           e.stopPropagation();
           setCameraPosition?.([0, 0, 25]);
+          onPartClick?.('back');
         }}
         onPointerOver={(e) => {
           e.stopPropagation();
@@ -97,6 +99,7 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
         onClick={(e) => {
           e.stopPropagation();
           setCameraPosition?.([0, 0, 25]);
+          onPartClick?.('front');
         }}
         onPointerOver={(e) => {
           e.stopPropagation();
@@ -121,6 +124,7 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
         onClick={(e) => {
           e.stopPropagation();
           setCameraPosition?.([0, 5, 10]);
+          onPartClick?.('neckline');
         }}
         onPointerOver={(e) => {
           e.stopPropagation();
@@ -152,6 +156,7 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
         onClick={(e) => {
           e.stopPropagation();
           setCameraPosition?.([5, 0, 15]);
+          onPartClick?.('leftSleeve');
         }}
         onPointerOver={(e) => {
           e.stopPropagation();
@@ -176,6 +181,7 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
         onClick={(e) => {
           e.stopPropagation();
           setCameraPosition?.([-5, 0, 15]);
+          onPartClick?.('rightSleeve');
         }}
         onPointerOver={(e) => {
           e.stopPropagation();

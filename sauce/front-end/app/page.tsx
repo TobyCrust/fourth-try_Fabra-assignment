@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useState, useRef } from "react"
 import { Environment, OrbitControls } from "@react-three/drei";
-import { Shirt } from '../public/threedobject/shirtcode';
+import { Shirt, ShirtPart } from '../public/threedobject/shirtcode';
 import CameraMovement from './CameraMovement';
 import ShirtRotationControls from './ShirtRotationControls';
 import * as THREE from 'three';
@@ -15,7 +15,7 @@ import { CardHorizontal } from "@/components/ui/Card";
 
 import {
   DrawerActionTrigger,
-  DrawerBackdrop,
+  // DrawerBackdrop,
   DrawerBody,
   DrawerCloseTrigger,
   DrawerContent,
@@ -39,6 +39,10 @@ export default function Home() {
     rightSleeve: 'Houndstooth fabric',
   });
 
+  
+  const [clickedPart, setClickedPart] = useState<ShirtPart | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   const availablePatterns = ['red-plaid', 'Houndstooth fabric', 'Denim fabric'];
 
   const changeMaterial = (part: keyof typeof materials) => {
@@ -52,15 +56,31 @@ export default function Home() {
     });
   };
 
+  // const clickMaterial = (part: keyof typeof materials) => {
+  //   setClickMaterial(prev => {
+  //     const currentMaterial = availablePatterns
+  //     return {
+  //       ...prev,
+  //       [part]: availablePatterns
+  //     };
+
+
+  //   });
+  // };
+  
+
   const [cameraPosition, setCameraPosition] = useState<[number, number, number]>([0, 0, 5]);
   const shirtRef = useRef<THREE.Group>(null);
 
-  const Tab = () => { //this is the code where I have put the chackra tab, it is long so keep it closed
-    const [open, setOpen] = useState(false)
+  const handlePartClick = (part: ShirtPart) => {
+    setClickedPart(part);
+    setIsDrawerOpen(true);
+  };
 
+  const Tab = () => {
     return (
-      <DrawerRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
-        <DrawerBackdrop />
+      <DrawerRoot open={isDrawerOpen} onOpenChange={(e) => setIsDrawerOpen(e.open)}>
+        {/* <DrawerBackdrop /> */}
         <DrawerTrigger asChild>
           <Button variant="outline" size="sm">
             Open Materials
@@ -72,29 +92,109 @@ export default function Home() {
           </DrawerHeader>
           <DrawerBody>
           <Box display="flex" flexDirection="column">
+          <Box
+              as="button"
+              onClick={() => {
+                
+                if(clickedPart) {
+                  setMaterials(prev =>({
+                    ...prev,
+                    [clickedPart]: 'red-plaid'
+
+                  }));
+                }
+              }}
+              style={{
+                background: 'none',
+                border: '4px',
+                padding: 0,
+                cursor: 'pointer'
+              }}
+            >
+        
             <Image
               objectFit="cover"
               maxW="100%"
               h="100%"
               src="/Images/red-plaid_preview.jpg"
-              alt="Material Preview"
+              alt="red-plaid"
               mb={4}
             />
+            </Box>
             <p>
               This is some default text which I will get about to replacing later when I figure some other things out
             </p>
+            <Box
+              as="button"
+              onClick={() => {
+
+                if(clickedPart) {
+                  setMaterials(prev =>({
+                    ...prev,
+                    [clickedPart]: 'Houndstooth fabric'
+
+                  }));
+                }
+              }}
+              style={{
+                background: 'none',
+                border: '4px',
+                padding: 0,
+                cursor: 'pointer'
+              }}
+            >
+
+            
+              <Image
+                mt={10}
+                objectFit="cover"
+                maxW="100%"
+                h="100%"
+                src="/Images/houndstooth-fabric-weave_preview.jpg"
+                alt="Houndstooth fabric"
+                mb={4}
+              />
+            
+            </Box>
+            <p>
+              Hounds Tooth weave 
+            </p>
+
+            <Box
+              as="button"
+              onClick={() => {
+                
+                
+                if(clickedPart) {
+                  setMaterials(prev =>({
+                    ...prev,
+                    [clickedPart]: 'Denim fabric'
+
+                  }));
+                }
+              }}
+              style={{
+                background: 'none',
+                border: '0px',
+                padding: 0,
+                cursor: 'pointer'
+              }}
+            >
             <Image
               mt={10}
               objectFit="cover"
               maxW="100%"
               h="100%"
-              src="/Images/houndstooth-fabric-weave_preview.jpg"
-              alt="Material Preview"
-              mb={4}
+              src="/Images/denim.png"
+              alt="Denim fabric"
+              mb={10}
             />
+            </Box>
+            
             <p>
-              Hounds Tooth weave 
+              Denium
             </p>
+            
             </Box>
           </DrawerBody>
           <DrawerFooter>
@@ -109,7 +209,7 @@ export default function Home() {
     )
   }
 
-  return (
+  return ( //main canvas where the shirt is being rendered
     <ChakraProvider value={defaultSystem}>
       <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
         <Canvas
@@ -129,6 +229,7 @@ export default function Home() {
               position={[0, -2, 0]} 
               materials={materials} 
               setCameraPosition={setCameraPosition}
+              onPartClick={handlePartClick} 
             />
             <Environment preset="studio" environmentIntensity={0.6} environmentRotation={[1000, 100, 0]}/>
             <ShirtRotationControls meshRef={shirtRef} />
@@ -140,19 +241,11 @@ export default function Home() {
           <Tab />
         </Box>
 
-        <Box position="absolute" top="20px" left="20px" zIndex={1}>
-          <CardHorizontal />
-        </Box>
+       
 
         <Box position="absolute" top="20px" left="20px" zIndex={1}>
           <Stack direction="column" align="flex-start">
-            <Button
-              colorScheme="blue"
-              onClick={() => {
-                changeMaterial('back');
-                setCameraPosition([0, 0, 25]);
-              }}
-            >
+          <Button colorScheme="blue" onClick={() => {changeMaterial('back'); setCameraPosition([0, 0, 25]); }}>
               Change Back
             </Button>
             <Button colorScheme="blue" onClick={() => { changeMaterial('front'); setCameraPosition([0, 0, 25]); }}>
