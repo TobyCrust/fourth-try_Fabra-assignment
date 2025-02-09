@@ -1,7 +1,0 @@
-FROM postgres:13
-
-ENV POSTGRES_DB=authdb
-ENV POSTGRES_USER=authuser
-ENV POSTGRES_PASSWORD=authpassword
-
-EXPOSE 5432
