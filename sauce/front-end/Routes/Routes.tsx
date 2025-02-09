@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 
 // Use dynamic imports for the components
 const LoginPage = dynamic(() => import('../pages/LoginPage/LoginPage'));
-const Page = dynamic(() => import('../app/page'));
+const Page = dynamic(() => import('../app/login/page'));
 
 interface PrivateRouteProps {
     children: React.ReactNode;
@@ -48,6 +48,11 @@ const AppRoutes: React.FC = () => {
             <Route path="/login" element={<LoginPage />} />
             
             {/* Protected Routes */}
+            <Route path="/" element={
+                <PrivateRoute>
+                    <Page />
+                </PrivateRoute>
+            } />
             <Route path="/viewer" element={
                 <PrivateRoute>
                     <Page />

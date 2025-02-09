@@ -6,14 +6,14 @@ import { GLTFLoader } from "three-stdlib";
 import styled from "styled-components";
 import { Canvas } from "@react-three/fiber";
 import { Environment, OrbitControls } from "@react-three/drei";
-import { Shirt, ShirtPart } from '../public/threedobject/shirtcode';
-import CameraMovement from './CameraMovement';
-import ShirtRotationControls from './ShirtRotationControls';
+import { Shirt, ShirtPart } from '../../public/threedobject/shirtcode';
+import CameraMovement from '../CameraMovement';
+import ShirtRotationControls from '../ShirtRotationControls';
 import * as THREE from 'three';
 import { Button, Box, Stack, ChakraProvider, defaultSystem, HStack, Image, Card, Badge } from "@chakra-ui/react";
-import { CardHorizontal } from "../components/ui/Card";
+import { CardHorizontal } from "../../components/ui/Card";
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 import {
   DrawerActionTrigger,
@@ -25,7 +25,7 @@ import {
   DrawerRoot,
   DrawerTitle,
   DrawerTrigger,
-} from "../components/ui/drawer"
+} from "../../components/ui/drawer"
 
 // Simple Error Boundary Component
 class ErrorBoundary extends React.Component<
