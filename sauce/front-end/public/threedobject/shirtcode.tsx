@@ -197,7 +197,7 @@ export const Shirt = forwardRef<THREE.Group, ShirtProps>(({ materials: materialP
   )
 });
 
-useGLTF.preload('/Shirt.glb')
+// useGLTF.preload('/Shirt.glb')
 
 
 

@@ -1,21 +1,22 @@
 "use client"
 
+import React, { Suspense, useState, useRef, useEffect } from "react";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three-stdlib";
 import styled from "styled-components";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useState, useRef } from "react"
 import { Environment, OrbitControls } from "@react-three/drei";
 import { Shirt, ShirtPart } from '../public/threedobject/shirtcode';
 import CameraMovement from './CameraMovement';
 import ShirtRotationControls from './ShirtRotationControls';
 import * as THREE from 'three';
 import { Button, Box, Stack, ChakraProvider, defaultSystem, HStack, Image, Card, Badge } from "@chakra-ui/react";
-import { CardHorizontal } from "@/components/ui/Card";
+import { CardHorizontal } from "../components/ui/Card";
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../contexts/AuthContext';
 
 import {
   DrawerActionTrigger,
-  // DrawerBackdrop,
   DrawerBody,
   DrawerCloseTrigger,
   DrawerContent,
@@ -24,13 +25,55 @@ import {
   DrawerRoot,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer"
+} from "../components/ui/drawer"
 
+// Simple Error Boundary Component
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode; onError: (error: Error) => void },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode; onError: (error: Error) => void }) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
 
+  componentDidCatch(error: Error) {
+    this.props.onError(error);
+  }
 
+  render() {
+    if (this.state.hasError) {
+      return null;
+    }
+    return this.props.children;
+  }
+}
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    console.log('Page mounted, auth state:', { isAuthenticated });
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      console.log('No token found, redirecting to login...');
+      router.push('/login');
+    }
+  }, [isAuthenticated]);
+
+  // Don't show anything while checking auth
+  if (!isAuthenticated) {
+    return null;
+  }
+
   const [materials, setMaterials] = useState({
     back: 'red-plaid',
     front: 'red-plaid',
@@ -39,7 +82,12 @@ export default function Home() {
     rightSleeve: 'Houndstooth fabric',
   });
 
-  
+  const handleError = (error: any) => {
+    console.error('Error loading 3D model:', error);
+    setLoadError('Failed to load 3D model. Please try refreshing the page.');
+    setIsLoading(false);
+  };
+
   const [clickedPart, setClickedPart] = useState<ShirtPart | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -56,19 +104,6 @@ export default function Home() {
     });
   };
 
-  // const clickMaterial = (part: keyof typeof materials) => {
-  //   setClickMaterial(prev => {
-  //     const currentMaterial = availablePatterns
-  //     return {
-  //       ...prev,
-  //       [part]: availablePatterns
-  //     };
-
-
-  //   });
-  // };
-  
-
   const [cameraPosition, setCameraPosition] = useState<[number, number, number]>([0, 0, 5]);
   const shirtRef = useRef<THREE.Group>(null);
 
@@ -79,7 +114,7 @@ export default function Home() {
 
   const Tab = () => {
     return (
-      <DrawerRoot open={isDrawerOpen} onOpenChange={(e) => setIsDrawerOpen(e.open)}>
+      <DrawerRoot open={isDrawerOpen} onOpenChange={(e: { open: boolean }) => setIsDrawerOpen(e.open)}>
         {/* <DrawerBackdrop /> */}
         <DrawerTrigger asChild>
           <Button variant="outline" size="sm">
@@ -209,9 +244,25 @@ export default function Home() {
     )
   }
 
-  return ( //main canvas where the shirt is being rendered
+  return (
     <ChakraProvider value={defaultSystem}>
       <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
+        {loadError && (
+          <div style={{ 
+            position: 'absolute', 
+            top: '50%', 
+            left: '50%', 
+            transform: 'translate(-50%, -50%)',
+            background: 'white',
+            padding: '20px',
+            borderRadius: '8px',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+            zIndex: 1000
+          }}>
+            {loadError}
+          </div>
+        )}
+        
         <Canvas
           shadows
           dpr={[1, 2]}
@@ -223,14 +274,16 @@ export default function Home() {
           <spotLight intensity={500000.6} angle={0.6} penumbra={2} position={[-220, -195, -150]} castShadow />
           
           <Suspense fallback={null}>
-            <Shirt 
-              ref={shirtRef}
-              scale={22.6} 
-              position={[0, -2, 0]} 
-              materials={materials} 
-              setCameraPosition={setCameraPosition}
-              onPartClick={handlePartClick} 
-            />
+            <ErrorBoundary onError={handleError}>
+              <Shirt 
+                ref={shirtRef}
+                scale={22.6} 
+                position={[0, -2, 0]} 
+                materials={materials} 
+                setCameraPosition={setCameraPosition}
+                onPartClick={handlePartClick} 
+              />
+            </ErrorBoundary>
             <Environment preset="studio" environmentIntensity={0.6} environmentRotation={[1000, 100, 0]}/>
             <ShirtRotationControls meshRef={shirtRef} />
           </Suspense>
@@ -240,8 +293,6 @@ export default function Home() {
         <Box position="absolute" top="20px" right="20px" zIndex={1}>
           <Tab />
         </Box>
-
-       
 
         <Box position="absolute" top="20px" left="20px" zIndex={1}>
           <Stack direction="column" align="flex-start">
@@ -272,6 +323,5 @@ const ThreeDContainer = styled.div`
     width: 100vw;
     height: 100vh;
     display: block;
-  }
-`;
-
+  };
+`
