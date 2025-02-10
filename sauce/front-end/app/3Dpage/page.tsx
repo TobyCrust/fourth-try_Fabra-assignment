@@ -53,6 +53,156 @@ class ErrorBoundary extends React.Component<
   }
 }
 
+interface Materials {
+  back: string;
+  front: string;
+  neckline: string;
+  leftSleeve: string;
+  rightSleeve: string;
+}
+
+const Tab = ({ 
+  isDrawerOpen, 
+  setIsDrawerOpen, 
+  clickedPart, 
+  setMaterials 
+}: { 
+  isDrawerOpen: boolean;
+  setIsDrawerOpen: (open: boolean) => void;
+  clickedPart: ShirtPart | null;
+  setMaterials: React.Dispatch<React.SetStateAction<Materials>>;
+}) => {
+  return (
+    <DrawerRoot open={isDrawerOpen} onOpenChange={(e: { open: boolean }) => setIsDrawerOpen(e.open)}>
+      {/* <DrawerBackdrop /> */}
+      <DrawerTrigger asChild>
+        <Button variant="outline" size="sm">
+          Open Materials
+        </Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Drawer Title</DrawerTitle>
+        </DrawerHeader>
+        <DrawerBody>
+        <Box display="flex" flexDirection="column">
+        <Box
+            as="button"
+            onClick={() => {
+              
+              if(clickedPart) {
+                setMaterials((prev: Materials) => ({
+                  ...prev,
+                  [clickedPart]: 'red-plaid'
+
+                }));
+              }
+            }}
+            style={{
+              background: 'none',
+              border: '4px',
+              padding: 0,
+              cursor: 'pointer'
+            }}
+          >
+      
+          <Image
+            objectFit="cover"
+            maxW="100%"
+            h="100%"
+            src="/Images/red-plaid_preview.jpg"
+            alt="red-plaid"
+            mb={4}
+          />
+          </Box>
+          <p>
+            This is some default text which I will get about to replacing later when I figure some other things out
+          </p>
+          <Box
+            as="button"
+            onClick={() => {
+
+              if(clickedPart) {
+                setMaterials((prev: Materials) => ({
+                  ...prev,
+                  [clickedPart]: 'Houndstooth fabric'
+
+                }));
+              }
+            }}
+            style={{
+              background: 'none',
+              border: '4px',
+              padding: 0,
+              cursor: 'pointer'
+            }}
+          >
+
+          
+            <Image
+              mt={10}
+              objectFit="cover"
+              maxW="100%"
+              h="100%"
+              src="/Images/houndstooth-fabric-weave_preview.jpg"
+              alt="Houndstooth fabric"
+              mb={4}
+            />
+          
+          </Box>
+          <p>
+            Hounds Tooth weave 
+          </p>
+
+          <Box
+            as="button"
+            onClick={() => {
+              
+              
+              if(clickedPart) {
+                setMaterials((prev: Materials) => ({
+                  ...prev,
+                  [clickedPart]: 'Denim fabric'
+
+                }));
+              }
+            }}
+            style={{
+              background: 'none',
+              border: '0px',
+              padding: 0,
+              cursor: 'pointer'
+            }}
+          >
+          <Image
+            mt={10}
+            objectFit="cover"
+            maxW="100%"
+            h="100%"
+            src="/Images/denim.png"
+            alt="Denim fabric"
+            mb={10}
+          />
+          </Box>
+          
+          <p>
+            Denium
+          </p>
+          
+          </Box>
+        </DrawerBody>
+        <DrawerFooter>
+          <DrawerActionTrigger asChild>
+            <Button variant="outline">Cancel</Button>
+          </DrawerActionTrigger>
+          <Button>Save</Button>
+        </DrawerFooter>
+        <DrawerCloseTrigger />
+      </DrawerContent>
+    </DrawerRoot>
+  )
+};
+
 export default function Home() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
@@ -65,16 +215,16 @@ export default function Home() {
     
     if (!token) {
       console.log('No token found, redirecting to login...');
-      router.push('/login');
+      router.push('/loginPage');
     }
   }, [isAuthenticated]);
 
   // Don't show anything while checking auth
   if (!isAuthenticated) {
-    return null;
+    router.push('/loginPage');
   }
 
-  const [materials, setMaterials] = useState({
+  const [materials, setMaterials] = useState<Materials>({
     back: 'red-plaid',
     front: 'red-plaid',
     neckline: 'Denim fabric',
@@ -82,18 +232,18 @@ export default function Home() {
     rightSleeve: 'Houndstooth fabric',
   });
 
-  const handleError = (error: any) => {
-    console.error('Error loading 3D model:', error);
-    setLoadError('Failed to load 3D model. Please try refreshing the page.');
-    setIsLoading(false);
-  };
+//   const handleError = (error: any) => {
+//     console.error('Error loading 3D model:', error);
+//     setLoadError('Failed to load 3D model. Please try refreshing the page.');
+//     setIsLoading(false);
+//   };
 
   const [clickedPart, setClickedPart] = useState<ShirtPart | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const availablePatterns = ['red-plaid', 'Houndstooth fabric', 'Denim fabric'];
 
-  const changeMaterial = (part: keyof typeof materials) => {
+  const changeMaterial = (part: keyof Materials) => {
     setMaterials(prev => {
       const currentIndex = availablePatterns.indexOf(prev[part]);
       const nextIndex = (currentIndex + 1) % availablePatterns.length;
@@ -111,138 +261,6 @@ export default function Home() {
     setClickedPart(part);
     setIsDrawerOpen(true);
   };
-
-  const Tab = () => {
-    return (
-      <DrawerRoot open={isDrawerOpen} onOpenChange={(e: { open: boolean }) => setIsDrawerOpen(e.open)}>
-        {/* <DrawerBackdrop /> */}
-        <DrawerTrigger asChild>
-          <Button variant="outline" size="sm">
-            Open Materials
-          </Button>
-        </DrawerTrigger>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Drawer Title</DrawerTitle>
-          </DrawerHeader>
-          <DrawerBody>
-          <Box display="flex" flexDirection="column">
-          <Box
-              as="button"
-              onClick={() => {
-                
-                if(clickedPart) {
-                  setMaterials(prev =>({
-                    ...prev,
-                    [clickedPart]: 'red-plaid'
-
-                  }));
-                }
-              }}
-              style={{
-                background: 'none',
-                border: '4px',
-                padding: 0,
-                cursor: 'pointer'
-              }}
-            >
-        
-            <Image
-              objectFit="cover"
-              maxW="100%"
-              h="100%"
-              src="/Images/red-plaid_preview.jpg"
-              alt="red-plaid"
-              mb={4}
-            />
-            </Box>
-            <p>
-              This is some default text which I will get about to replacing later when I figure some other things out
-            </p>
-            <Box
-              as="button"
-              onClick={() => {
-
-                if(clickedPart) {
-                  setMaterials(prev =>({
-                    ...prev,
-                    [clickedPart]: 'Houndstooth fabric'
-
-                  }));
-                }
-              }}
-              style={{
-                background: 'none',
-                border: '4px',
-                padding: 0,
-                cursor: 'pointer'
-              }}
-            >
-
-            
-              <Image
-                mt={10}
-                objectFit="cover"
-                maxW="100%"
-                h="100%"
-                src="/Images/houndstooth-fabric-weave_preview.jpg"
-                alt="Houndstooth fabric"
-                mb={4}
-              />
-            
-            </Box>
-            <p>
-              Hounds Tooth weave 
-            </p>
-
-            <Box
-              as="button"
-              onClick={() => {
-                
-                
-                if(clickedPart) {
-                  setMaterials(prev =>({
-                    ...prev,
-                    [clickedPart]: 'Denim fabric'
-
-                  }));
-                }
-              }}
-              style={{
-                background: 'none',
-                border: '0px',
-                padding: 0,
-                cursor: 'pointer'
-              }}
-            >
-            <Image
-              mt={10}
-              objectFit="cover"
-              maxW="100%"
-              h="100%"
-              src="/Images/denim.png"
-              alt="Denim fabric"
-              mb={10}
-            />
-            </Box>
-            
-            <p>
-              Denium
-            </p>
-            
-            </Box>
-          </DrawerBody>
-          <DrawerFooter>
-            <DrawerActionTrigger asChild>
-              <Button variant="outline">Cancel</Button>
-            </DrawerActionTrigger>
-            <Button>Save</Button>
-          </DrawerFooter>
-          <DrawerCloseTrigger />
-        </DrawerContent>
-      </DrawerRoot>
-    )
-  }
 
   return (
     <ChakraProvider value={defaultSystem}>
@@ -274,7 +292,7 @@ export default function Home() {
           <spotLight intensity={500000.6} angle={0.6} penumbra={2} position={[-220, -195, -150]} castShadow />
           
           <Suspense fallback={null}>
-            <ErrorBoundary onError={handleError}>
+            {/* <ErrorBoundary onError={handleError}> */}
               <Shirt 
                 ref={shirtRef}
                 scale={22.6} 
@@ -283,7 +301,7 @@ export default function Home() {
                 setCameraPosition={setCameraPosition}
                 onPartClick={handlePartClick} 
               />
-            </ErrorBoundary>
+            {/* </ErrorBoundary> */}
             <Environment preset="studio" environmentIntensity={0.6} environmentRotation={[1000, 100, 0]}/>
             <ShirtRotationControls meshRef={shirtRef} />
           </Suspense>
@@ -291,7 +309,12 @@ export default function Home() {
         </Canvas>
 
         <Box position="absolute" top="20px" right="20px" zIndex={1}>
-          <Tab />
+          <Tab 
+            isDrawerOpen={isDrawerOpen}
+            setIsDrawerOpen={setIsDrawerOpen}
+            clickedPart={clickedPart}
+            setMaterials={setMaterials}
+          />
         </Box>
 
         <Box position="absolute" top="20px" left="20px" zIndex={1}>
@@ -318,10 +341,13 @@ export default function Home() {
   );
 }
 
+
+
+
 const ThreeDContainer = styled.div`
   canvas {
     width: 100vw;
     height: 100vh;
     display: block;
   };
-`
+`;

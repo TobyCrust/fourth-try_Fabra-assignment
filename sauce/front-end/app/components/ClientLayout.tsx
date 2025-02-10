@@ -1,6 +1,6 @@
 "use client";
 
-import { AuthProvider } from '../../contexts/AuthContext';
+import { AuthProvider, useAuth } from '../../contexts/AuthContext';
 
 export default function ClientLayout({
   children,

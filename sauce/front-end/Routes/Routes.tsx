@@ -1,73 +1,55 @@
-import React, { useEffect } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import React, { Suspense, ReactNode } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import dynamic from 'next/dynamic';
 
-// Use dynamic imports for the components
-const LoginPage = dynamic(() => import('../pages/LoginPage/LoginPage'));
-const Page = dynamic(() => import('../app/login/page'));
+// Dynamically import pages
+const Page = dynamic(() => import('../app/3Dpage/page'));
+const LoginPage = dynamic(() => import('../app/loginPage/page'));
 
 interface PrivateRouteProps {
-    children: React.ReactNode;
+    children: ReactNode;
 }
 
+// Private route component
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     const { isAuthenticated } = useAuth();
-    const location = useLocation();
-    
-    console.log('PrivateRoute check:', { 
-        isAuthenticated,
-        hasToken: !!localStorage.getItem('authToken'),
-        currentPath: location.pathname
-    });
-    
-    if (!isAuthenticated) {
-        console.log('Not authenticated, redirecting to login...');
-        return <Navigate to="/login" state={{ from: location }} replace />;
-    }
-    
-    console.log('Authenticated, showing protected content');
-    return <>{children}</>;
+
+    if (isAuthenticated === undefined) return <></>; // Prevents rendering undefined JSX
+
+    return isAuthenticated ? <>{children}</> : <Navigate to="/3Dpage" replace />;
 };
 
+// App routes component
 const AppRoutes: React.FC = () => {
     const { isAuthenticated } = useAuth();
-    const location = useLocation();
-
-    useEffect(() => {
-        console.log('AppRoutes auth state:', { 
-            isAuthenticated,
-            hasToken: !!localStorage.getItem('authToken'),
-            currentPath: location.pathname
-        });
-    }, [isAuthenticated, location]);
 
     return (
-        <Routes>
-            {/* Public Routes */}
-            <Route path="/login" element={<LoginPage />} />
-            
-            {/* Protected Routes */}
-            <Route path="/" element={
-                <PrivateRoute>
-                    <Page />
-                </PrivateRoute>
-            } />
-            <Route path="/viewer" element={
-                <PrivateRoute>
-                    <Page />
-                </PrivateRoute>
-            } />
-            
-            {/* Default Route - Always redirect to login first */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
-            
-            {/* Catch all unknown routes */}
-            <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
+        <Router>
+            <Suspense fallback={<div>Loading...</div>}>
+                <Routes>
+                    {/* Public Route */}
+                    <Route path="/loginPage" element={<LoginPage />} />
+
+                    {/* Private Route */}
+                    <Route 
+                        path="/3Dpage" 
+                        element={
+                            <PrivateRoute>
+                                <Page />
+                            </PrivateRoute>
+                        } 
+                    />
+
+                    {/* Redirect to 3D Page if Authenticated */}
+                    <Route path="/" element={isAuthenticated ? <Navigate to="/3Dpage" replace /> : <Navigate to="/loginPage" replace />} />
+
+                    {/* Catch-All Route */}
+                    <Route path="*" element={<Navigate to="/3Dpage" replace />} />
+                </Routes>
+            </Suspense>
+        </Router>
     );
 };
-
-
 
 export default AppRoutes;

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
@@ -22,7 +24,7 @@ const LoginPage: React.FC = () => {
     const [error, setError] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormsInputs>({ 
-        resolver: yupResolver(validation) 
+        resolver: yupResolver(validation)
     });
 
     const onSubmit = async (data: LoginFormsInputs) => {
@@ -39,11 +41,8 @@ const LoginPage: React.FC = () => {
                 login(response.data.token);
                 localStorage.setItem('authToken', response.data.token);
                 setShowSuccess(true);
-                console.log('Login successful, redirecting in 2 seconds...');
-                setTimeout(() => {
-                    console.log('Redirecting now...');
-                    router.push('/');  // Redirect directly to viewer instead of root
-                }, 2000);
+                console.log('Login successful, redirecting...');
+                router.push('/3Dpage');
             } else {
                 console.log('Invalid response:', response.data);
                 setError('Invalid response from server');

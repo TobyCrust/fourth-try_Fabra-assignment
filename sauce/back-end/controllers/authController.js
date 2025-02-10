@@ -10,7 +10,7 @@ exports.register = async (req, res) => {
         // Create user
         const user = await User.create({
             username,
-            email,
+            
             password, // Plain text password
         });
 

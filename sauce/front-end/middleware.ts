@@ -3,16 +3,17 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('authToken')?.value
-  const isAuthPage = request.nextUrl.pathname === '/login'
+  const isLoginPage = request.nextUrl.pathname === '/loginPage'
+  const is3DPage = request.nextUrl.pathname.startsWith('/3Dpage')
 
-  // Protect all routes except /login
-  if (!token && !isAuthPage) {
-    return NextResponse.redirect(new URL('/login', request.url))
+  // If no token and not on login page, redirect to login
+  if (!token && isLoginPage) {
+    return NextResponse.redirect(new URL('/3Dpage', request.url))
   }
 
-  // Redirect to home if trying to access login while authenticated
-  if (token && isAuthPage) {
-    return NextResponse.redirect(new URL('/', request.url))
+  // If has token and on login page, redirect to 3D page
+  if (token && isLoginPage) {
+    return NextResponse.redirect(new URL('/3Dpage', request.url))
   }
 
   return NextResponse.next()
