@@ -48,7 +48,7 @@ Added a variable that changes the shirt scale which replicates the camera zoom i
 
 Have finnaly got the login working. I had a really bad file structure so I had to redo that which caused more problems. The fix was the I had if !token and isLoginPage then redirect to loginPage which created an infinate loop where I could't redirect
 
-
+Tried to run project in google cloud through the docker files I created, got close but keep having permission errors and don't have enough time sadly. 
 
 
 
