@@ -1,32 +1,50 @@
+version: '3.8'
+
 services:
   db:
-    image: postgres:14
+    image: postgres
+    restart: always
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "4000:4000"
+      POSTGRES_USER: user
+      POSTGRES_DB: authdb
+      POSTGRES_PASSWORD: password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
+ 
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
 
   backend:
-    build: ./server
+    build: ./sauce/back-end
     ports:
-      - "4000:4000"
-    environment:
-      NODE_ENV: development
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      SESSION_SECRET: ${SESSION_SECRET}
+      - "3001:3001"
     depends_on:
       - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_NAME=authdb
+      - JWT_SECRET=your_jwt_secret
+
+  frontend:
+    build:
+      context: ./sauce/front-end
+      target: dev  # Use "production" for production builds
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
     volumes:
-      - ./server:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./sauce/front-end:/app
+      - /app/node_modules
+    depends_on:
+      - db  # If your Next.js app depends on a database (optional)
 
 volumes:
-  postgres_data:
+  pgdata:

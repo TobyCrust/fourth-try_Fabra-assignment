@@ -27,7 +27,7 @@ import {
   DrawerTrigger,
 } from "../../components/ui/drawer"
 
-// Simple Error Boundary Component
+
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode; onError: (error: Error) => void },
   { hasError: boolean }
@@ -82,7 +82,7 @@ const Tab = ({
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Drawer Title</DrawerTitle>
+          <DrawerTitle>Materials</DrawerTitle>
         </DrawerHeader>
         <DrawerBody>
         <Box display="flex" flexDirection="column">
@@ -116,7 +116,7 @@ const Tab = ({
           />
           </Box>
           <p>
-            This is some default text which I will get about to replacing later when I figure some other things out
+          <strong>Red Plaid Fabric</strong> – Cozy, checkered design.
           </p>
           <Box
             as="button"
@@ -151,7 +151,7 @@ const Tab = ({
           
           </Box>
           <p>
-            Hounds Tooth weave 
+          <strong>Houndstooth Fabric</strong> – Bold, timeless pattern.
           </p>
 
           <Box
@@ -186,7 +186,7 @@ const Tab = ({
           </Box>
           
           <p>
-            Denium
+          <strong>Denim Fabric</strong> – Classic, durable, and stylish.
           </p>
           
           </Box>
