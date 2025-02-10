@@ -15,17 +15,8 @@ import { CardHorizontal } from "../../components/ui/Card";
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 
-import {
-  DrawerActionTrigger,
-  DrawerBody,
-  DrawerCloseTrigger,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerRoot,
-  DrawerTitle,
-  DrawerTrigger,
-} from "../../components/ui/drawer"
+import { 
+  DrawerActionTrigger,DrawerBody,DrawerCloseTrigger,DrawerContent,DrawerFooter,DrawerHeader,DrawerRoot,DrawerTitle,DrawerTrigger,} from "../../components/ui/drawer"
 
 
 class ErrorBoundary extends React.Component<
@@ -53,13 +44,15 @@ class ErrorBoundary extends React.Component<
   }
 }
 
-interface Materials {
+interface Materials { // setting up all the shirt materials in typecsript format
   back: string;
   front: string;
   neckline: string;
   leftSleeve: string;
   rightSleeve: string;
 }
+
+
 
 const Tab = ({ 
   isDrawerOpen, 
@@ -213,7 +206,7 @@ export default function Home() {
     console.log('Page mounted, auth state:', { isAuthenticated });
     const token = localStorage.getItem('authToken');
     
-    if (!token) {
+    if (!token) { //making sure that the user is directed to the login page
       console.log('No token found, redirecting to login...');
       router.push('/loginPage');
     }
@@ -224,7 +217,7 @@ export default function Home() {
     router.push('/loginPage');
   }
 
-  const [materials, setMaterials] = useState<Materials>({
+  const [materials, setMaterials] = useState<Materials>({ // setting the inital state of the materials
     back: 'red-plaid',
     front: 'red-plaid',
     neckline: 'Denim fabric',
@@ -241,7 +234,7 @@ export default function Home() {
   const [clickedPart, setClickedPart] = useState<ShirtPart | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const availablePatterns = ['red-plaid', 'Houndstooth fabric', 'Denim fabric'];
+  const availablePatterns = ['red-plaid', 'Houndstooth fabric', 'Denim fabric']; //cycle through materials buttons
 
   const changeMaterial = (part: keyof Materials) => {
     setMaterials(prev => {
@@ -257,9 +250,9 @@ export default function Home() {
   const [cameraPosition, setCameraPosition] = useState<[number, number, number]>([0, 0, 5]);
   const shirtRef = useRef<THREE.Group>(null);
 
-  const handlePartClick = (part: ShirtPart) => {
+  const handlePartClick = (part: ShirtPart) => { //setting the mesh that is clicked to be the part variable which is stored so that it is that part that has it's material changed when the material image in the tab section is pressed
     setClickedPart(part);
-    setIsDrawerOpen(true);
+    setIsDrawerOpen(true); 
   };
 
   return (
@@ -288,7 +281,7 @@ export default function Home() {
           style={{ width: "100%", height: "100%" }}
         >
           <ambientLight intensity={0.2} />
-          <spotLight intensity={600.6} angle={0.6} penumbra={2} position={[10, 15, 10]} castShadow />
+          <spotLight intensity={600.6} angle={0.6} penumbra={2} position={[10, 15, 10]} castShadow /> {/* the shirt looks much nicer with these two positioned spotlights */}
           <spotLight intensity={500000.6} angle={0.6} penumbra={2} position={[-220, -195, -150]} castShadow />
           
           <Suspense fallback={null}>
@@ -301,7 +294,7 @@ export default function Home() {
                 setCameraPosition={setCameraPosition}
                 onPartClick={handlePartClick} 
               />
-            {/* </ErrorBoundary> */}
+            {/* </ErrorBoundary> */} 
             <Environment preset="studio" environmentIntensity={0.6} environmentRotation={[1000, 100, 0]}/>
             <ShirtRotationControls meshRef={shirtRef} />
           </Suspense>
@@ -317,7 +310,7 @@ export default function Home() {
           />
         </Box>
 
-        <Box position="absolute" top="20px" left="20px" zIndex={1}>
+        <Box position="absolute" top="20px" left="20px" zIndex={1}> {/* cycle buttons on left of screen */}
           <Stack direction="column" align="flex-start">
           <Button colorScheme="blue" onClick={() => {changeMaterial('back'); setCameraPosition([0, 0, 25]); }}>
               Change Back

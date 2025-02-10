@@ -20,7 +20,7 @@ const CameraMovement: React.FC<CameraMovementProps> = ({ position }) => {
     }
   });
 
-  return <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 0, 25]} />;
+  return <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 0, 25]} />
 };
 
 export default CameraMovement; 

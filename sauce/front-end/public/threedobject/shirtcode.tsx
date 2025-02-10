@@ -1,3 +1,5 @@
+//lots of this code is from https://gltf.pmnd.rs/ I changed it to work with typescript and also set the materials to be variables as well as the object parts
+
 import React, { useMemo, useState, forwardRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'

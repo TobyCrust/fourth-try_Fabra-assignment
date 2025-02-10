@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
             isValid: true  // Always true now
         });
 
-        // Generate token without checking password
+        
         const token = jwt.sign(
             { id: user.id, username: user.username },
             JWT_SECRET,
