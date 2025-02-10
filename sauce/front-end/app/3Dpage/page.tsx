@@ -72,7 +72,7 @@ const Tab = ({
   clickedPart: ShirtPart | null;
   setMaterials: React.Dispatch<React.SetStateAction<Materials>>;
 }) => {
-  return (
+  return ( // this is the materials drawer where you can select the different materials. I importeded a chakra-ui component for this. The code can be found in components/ui
     <DrawerRoot open={isDrawerOpen} onOpenChange={(e: { open: boolean }) => setIsDrawerOpen(e.open)}>
       {/* <DrawerBackdrop /> */}
       <DrawerTrigger asChild>
@@ -86,7 +86,7 @@ const Tab = ({
         </DrawerHeader>
         <DrawerBody>
         <Box display="flex" flexDirection="column">
-        <Box
+        <Box //added a boxs that overlays the top of the images for button functonality
             as="button"
             onClick={() => {
               
