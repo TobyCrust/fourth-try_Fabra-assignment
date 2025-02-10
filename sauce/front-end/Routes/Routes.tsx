@@ -45,7 +45,7 @@ const AppRoutes: React.FC = () => {
                     <Route path="/" element={isAuthenticated ? <Navigate to="/3Dpage" replace /> : <Navigate to="/loginPage" replace />} />
 
                     {/* Catch-All Route */}
-                    <Route path="*" element={<Navigate to="/3Dpage" replace />} />
+                    <Route path="*" element={<Navigate to="/loginPage" replace />} />
                 </Routes>
             </Suspense>
         </Router>

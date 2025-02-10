@@ -7,9 +7,9 @@ export function middleware(request: NextRequest) {
   const is3DPage = request.nextUrl.pathname.startsWith('/3Dpage')
 
   // If no token and not on login page, redirect to login
-  if (!token && isLoginPage) {
-    return NextResponse.redirect(new URL('/3Dpage', request.url))
-  }
+  // if (!token && isLoginPage) {
+  //   return NextResponse.redirect(new URL('/3Dpage', request.url))
+  // }
 
   // If has token and on login page, redirect to 3D page
   if (token && isLoginPage) {
